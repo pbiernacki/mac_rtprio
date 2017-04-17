@@ -24,16 +24,13 @@ SYSCTL_INT(_security_mac_rtprio, OID_AUTO, gid, CTLFLAG_RW,
 static int
 rtprio_priv_grant(struct ucred *cred, int priv)
 {
-	if (!rtprio_enabled || priv != PRIV_SCHED_RTPRIO) {
-		return (EPERM);
-	}
+    if (!rtprio_enabled || priv != PRIV_SCHED_RTPRIO) {
+        return (EPERM);
+    }
 
     if (rtprio_gid >= 0) {
-        for (int i = 0; i < cred->cr_ngroups; i++) {
-            if (rtprio_gid == cred->cr_groups[i]) {
-                return (0);
-            }
-        }
+        if (groupmember(rtprio_gid, cred)) {
+            return (0);
     }
 
     return (EPERM);
