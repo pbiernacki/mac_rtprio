@@ -31,6 +31,7 @@ rtprio_priv_grant(struct ucred *cred, int priv)
     if (rtprio_gid >= 0) {
         if (groupmember(rtprio_gid, cred)) {
             return (0);
+        }
     }
 
     return (EPERM);
